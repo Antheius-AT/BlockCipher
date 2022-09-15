@@ -1,4 +1,4 @@
-﻿namespace Cryptools
+﻿namespace Cryptools.Models
 {
     using Cryptools.Interfaces;
 
@@ -8,6 +8,8 @@
         {
             this.KeyBytes = keyBytes;
         }
+
+        public int KeySize => KeyBytes.Length;
 
         public byte[] KeyBytes { get; set; }
     }

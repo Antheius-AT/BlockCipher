@@ -23,5 +23,7 @@
                     : throw new ArgumentOutOfRangeException("Block size must be greater than 0 and a power of 2"); 
             }
         }
+
+        public void Transform()
     }
 }
