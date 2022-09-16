@@ -28,5 +28,10 @@ namespace Cryptools.Actors
 		{
 			throw new NotImplementedException();
 		}
+
+		public byte[] GetResult()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

@@ -15,5 +15,7 @@ namespace Cryptools.Interfaces
 		Task Visit(ElectronicCodebookMode mode);
 
 		Task Visit(OutputFeedbackMode mode);
+
+		byte[] GetResult();
 	}
 }

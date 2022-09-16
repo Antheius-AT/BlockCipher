@@ -20,6 +20,8 @@ namespace Cryptools.Models
             }
         }
 
+		public byte[] WholeBlock => Data.Concat(Padding ?? Enumerable.Empty<byte>()).ToArray();
+
         public byte[] Data { get; }
 
         public byte[]? Padding { get; }

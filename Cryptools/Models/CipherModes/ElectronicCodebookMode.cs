@@ -19,10 +19,5 @@ namespace Cryptools.Models.CipherModes
 		{
 			await visitor.Visit(this);
 		}
-
-		public byte[] GetResult()
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

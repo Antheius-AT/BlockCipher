@@ -7,7 +7,5 @@ namespace Cryptools.Interfaces
 	public interface ICipherModeVisitable
 	{
 		Task Accept(ICipherModeVisitor visitor);
-
-		byte[] GetResult();
 	}
 }
