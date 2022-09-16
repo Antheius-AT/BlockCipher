@@ -6,5 +6,9 @@ namespace Cryptools.Actors
 {
     public class Encryptor
     {
+		public byte[] Encrypt(byte[] plainText, byte[] key)
+		{
+			throw new NotImplementedException();
+		}
     }
 }

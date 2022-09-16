@@ -1,4 +1,8 @@
-﻿namespace Cryptools.Models
+﻿// Copyright file="Block.cs" Fachhochschule Technikum Wien (FHTW).
+// Licensed under the MIT license.
+// Author "Gregor Faiman"
+
+namespace Cryptools.Models
 {
     public class Block
     {
@@ -12,7 +16,7 @@
         {
             get
             {
-                return new BlockSize(Data.Length + Padding.Length);
+                return new BlockSize(Data.Length + Padding?.Length ?? 0);
             }
         }
 

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// Copyright file="EncryptionInformation.cs" Fachhochschule Technikum Wien (FHTW).
+// Licensed under the MIT license.
+// Author "Gregor Faiman"
 
 namespace Cryptools.Models
 {
-    public class EncryptionInformation
+	public class EncryptionInformation
     {
         public EncryptionInformation(SymmetricKey symmetricKey)
         {
