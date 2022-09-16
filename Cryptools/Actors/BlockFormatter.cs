@@ -1,9 +1,13 @@
-﻿using Cryptools.Models;
-using System.Security.Cryptography;
+﻿// Copyright file="BlockFormatter.cs" Fachhochschule Technikum Wien (FHTW).
+// Licensed under the MIT license.
+// Author "Gregor Faiman"
 
-namespace Cryptools
+namespace Cryptools.Actors
 {
-    public class BlockFormatter
+	using Cryptools.Models;
+	using System.Security.Cryptography;
+
+	public class BlockFormatter
     {
         private int blockSize;
 
@@ -18,12 +22,12 @@ namespace Cryptools
             {
                 return blockSize;
             }
-            set 
-            { 
-                blockSize = 
-                    (value > 127 && Math.Log2(value) % 1 == 0)
-                    ? value 
-                    : throw new ArgumentOutOfRangeException("Block size must be at least 128 and a power of 2"); 
+            set
+            {
+                blockSize =
+                    value > 127 && Math.Log2(value) % 1 == 0
+                    ? value
+                    : throw new ArgumentOutOfRangeException("Block size must be at least 128 and a power of 2");
             }
         }
 
@@ -50,7 +54,7 @@ namespace Cryptools
 
                 blocks.Add(new Block(current, padding));
                 text = text[0..(text.Length - current.Length)];
-            } 
+            }
             while (current.Length == BlockSizeInBytes);
 
             return blocks.ToArray();

@@ -4,6 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	  <Company>Fachhochschule Technikum Wien (FHTW)</Company>
+	  <Authors>Gregor Faiman</Authors>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,7 +1,19 @@
-﻿using Cryptools;
-using System.Collections;
-using System.Text;
+﻿// Copyright file="Program.cs" Fachhochschule Technikum Wien (FHTW).
+// Licensed under the MIT license.
+// Author "Gregor Faiman"
 
-var blockFormatter = new BlockFormatter(128);
+namespace Cryptools
+{
+    using Cryptools.Actors;
+    using System.Text;
 
-var blocks = blockFormatter.TransformText(Encoding.ASCII.GetBytes("Hallo duda das ist ein lä#ngerer Test test text"));
+    public class Program
+    {
+        private static void Main(string[] args)
+        {
+            var blockFormatter = new BlockFormatter(128);
+
+            var blocks = blockFormatter.TransformText(Encoding.ASCII.GetBytes("Hallo duda das ist ein lä#ngerer Test test text"));
+        }
+    }
+}
