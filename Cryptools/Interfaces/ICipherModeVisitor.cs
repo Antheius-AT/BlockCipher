@@ -8,12 +8,12 @@ namespace Cryptools.Interfaces
 
 	public interface ICipherModeVisitor
 	{
-		void Visit(CipherBlockChainMode mode);
-		
-		void Visit(CipherFeedbackMode mode);
+		Task Visit(CipherBlockChainMode mode);
 
-		void Visit(ElectronicCodebookMode mode);
+		Task Visit(CipherFeedbackMode mode);
 
-		void Visit(OutputFeedbackMode mode);
+		Task Visit(ElectronicCodebookMode mode);
+
+		Task Visit(OutputFeedbackMode mode);
 	}
 }

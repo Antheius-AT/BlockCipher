@@ -4,13 +4,19 @@
 
 namespace Cryptools.Models.CipherModes
 {
+	using System.Threading.Tasks;
 	using Cryptools.Interfaces;
 
 	public class CipherBlockChainMode : ICipherModeVisitable
 	{
-		public void Accept(ICipherModeVisitor visitor)
+		public async Task Accept(ICipherModeVisitor visitor)
 		{
-			visitor.Visit(this);
+			await visitor.Visit(this);
+		}
+
+		public byte[] GetResult()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

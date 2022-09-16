@@ -6,6 +6,8 @@ namespace Cryptools.Interfaces
 {
 	public interface ICipherModeVisitable
 	{
-		void Accept(ICipherModeVisitor visitor);
+		Task Accept(ICipherModeVisitor visitor);
+
+		byte[] GetResult();
 	}
 }

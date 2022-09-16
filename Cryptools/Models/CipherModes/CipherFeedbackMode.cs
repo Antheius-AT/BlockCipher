@@ -8,9 +8,14 @@ namespace Cryptools.Models.CipherModes
 
 	public class CipherFeedbackMode : ICipherModeVisitable
 	{
-		public void Accept(ICipherModeVisitor visitor)
+		public async Task Accept(ICipherModeVisitor visitor)
 		{
-			visitor.Visit(this);
+			await visitor.Visit(this);
+		}
+
+		public byte[] GetResult()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

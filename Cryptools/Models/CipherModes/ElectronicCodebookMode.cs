@@ -8,9 +8,21 @@ namespace Cryptools.Models.CipherModes
 
 	public class ElectronicCodebookMode : ICipherModeVisitable
 	{
-		public void Accept(ICipherModeVisitor visitor)
+		public ElectronicCodebookMode(Block block)
 		{
-			visitor.Visit(this);
+			this.Block = block;
+		}
+
+		public Block Block { get; }
+
+		public async Task Accept(ICipherModeVisitor visitor)
+		{
+			await visitor.Visit(this);
+		}
+
+		public byte[] GetResult()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
