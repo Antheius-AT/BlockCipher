@@ -2,7 +2,7 @@
 {
     public class Block
     {
-        public Block(byte[] data, byte[] padding)
+        public Block(byte[] data, byte[]? padding = null)
         {
             this.Data = data;
             this.Padding = padding;
@@ -18,6 +18,6 @@
 
         public byte[] Data { get; }
 
-        public byte[] Padding { get; }
+        public byte[]? Padding { get; }
     }
 }
