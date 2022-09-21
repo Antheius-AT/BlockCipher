@@ -14,20 +14,20 @@ namespace Cryptools.Actors
 	public class Decryptor : ICipherModeVisitor
 	{
 		private readonly CryptoNetwork network;
-		private SymmetricKey? key;
-		private Block operationResult;
+		private BitArray? key;
+		private RoundResult operationResult;
 
 		public Decryptor(CryptoNetwork network)
 		{
 			this.network = network;
 		}
 
-		public Block GetResult()
+		public RoundResult GetResult()
 		{
 			return operationResult;
 		}
 
-		public void SetCryptoParams(SymmetricKey key)
+		public void SetCryptoParams(BitArray key)
 		{
 			this.key = key;
 		}
@@ -49,7 +49,7 @@ namespace Cryptools.Actors
 				throw new InvalidOperationException("Key must not be null to encrypt data");
 			}
 
-			var keyBits = new BitArray(key.KeyBytes);
+			var keyBits = new BitArray(key);
 
 			var decryptedBlock = await network.DecryptBlock(mode.Block, keyBits);
 			operationResult = decryptedBlock;

@@ -22,10 +22,29 @@ namespace Cryptools
 
         private static async Task Main(string[] args)
         {
+            var test = new BitArray(3, true);
+
             int blockLength = 128;
 
             var network = new CryptoNetwork(new List<ICryptoModule>()
             {
+                new Permutator(CreatePermutationTable(blockLength)),
+                new Permutator(CreatePermutationTable(blockLength)),
+                new Permutator(CreatePermutationTable(blockLength)),
+                new Permutator(CreatePermutationTable(blockLength)),
+                new Permutator(CreatePermutationTable(blockLength)),
+                new Permutator(CreatePermutationTable(blockLength)),
+                new Permutator(CreatePermutationTable(blockLength)),
+                new Permutator(CreatePermutationTable(blockLength)),
+                new Permutator(CreatePermutationTable(blockLength)),
+                new Permutator(CreatePermutationTable(blockLength)),
+                new Permutator(CreatePermutationTable(blockLength)),
+                new Permutator(CreatePermutationTable(blockLength)),
+                new Permutator(CreatePermutationTable(blockLength)),
+                new Permutator(CreatePermutationTable(blockLength)),
+                new Permutator(CreatePermutationTable(blockLength)),
+                new Permutator(CreatePermutationTable(blockLength)),
+                new Permutator(CreatePermutationTable(blockLength)),
                 new Permutator(CreatePermutationTable(blockLength)),
             });
 
@@ -40,16 +59,22 @@ namespace Cryptools
 
             plainTextBytes = AppendPadding(plainTextBytes, blockLength);
             List<Block> encryptedBlocks = new List<Block>();
-            
+
+            var initialKey = key.KeyBytes;
+
             var blocks = blockFormatter.TransformTextToBlocks(plainTextBytes);
-            visitor.SetCryptoParams(key);
+            var currentKey = new BitArray(key.KeyBytes);
+
+            visitor.SetCryptoParams(currentKey);
 
             foreach (var item in blocks)
             {
                 var mode = new ElectronicCodebookMode(item);
+                visitor.SetCryptoParams(currentKey);
                 await mode.Accept(visitor);
-                var singleBlockResult = visitor.GetResult();
-                encryptedBlocks.Add(singleBlockResult);
+                var roundResult = visitor.GetResult();
+                currentKey = roundResult.CurrentKey;
+                encryptedBlocks.Add(roundResult.Block);
             }
 
             Console.WriteLine($"Plaintext without padding: {plainText}");
@@ -70,14 +95,17 @@ namespace Cryptools
 
             var decryptor = new Decryptor(network);
 
-            decryptor.SetCryptoParams(key);
+            decryptor.SetCryptoParams(currentKey);
             foreach (var item in encryptedBlocks)
             {
                 var mode = new ElectronicCodebookMode(item);
                 await mode.Accept(decryptor);
                 var singleResult = decryptor.GetResult();
-                decipheredBytes.Add(singleResult);
+                currentKey = singleResult.CurrentKey;
+                decipheredBytes.Add(singleResult.Block);
             }
+
+            var modifiedKey = currentKey.ToByteArray();
 
             var finalResult = blockFormatter.TransformBlocksToText(decipheredBytes);
 

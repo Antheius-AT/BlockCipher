@@ -17,7 +17,7 @@ namespace Cryptools.Actors
 			this.cryptoModules = cryptoModules;
 		}
 
-		public async Task<Block> EncryptBlock(Block plaintext, BitArray key)
+		public async Task<RoundResult> EncryptBlock(Block plaintext, BitArray key)
 		{
 			var currentInputBlock = plaintext;
 			var currentKey = key;
@@ -29,10 +29,10 @@ namespace Cryptools.Actors
 				currentKey = currentResult.CurrentKey;
 			}
 
-			return currentInputBlock;
+			return new RoundResult(currentInputBlock, currentKey);
 		}
 
-		public async Task<Block> DecryptBlock(Block plainText, BitArray key)
+		public async Task<RoundResult> DecryptBlock(Block plainText, BitArray key)
 		{
 			var currentInputBlock = plainText;
 			var currentKey = key;
@@ -44,7 +44,7 @@ namespace Cryptools.Actors
 				currentKey = currentResult.CurrentKey;
 			}
 
-			return currentInputBlock;
+			return new RoundResult(currentInputBlock, currentKey);
 		}
 	}
 }

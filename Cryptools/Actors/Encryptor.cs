@@ -12,9 +12,9 @@ namespace Cryptools.Actors
 
 	public class Encryptor : ICipherModeVisitor
     {
-		private SymmetricKey? key;
+		private BitArray? key;
 		private CryptoNetwork network;
-		private Block operationResult;
+		private RoundResult operationResult;
 
 		public Encryptor(CryptoNetwork network)
 		{
@@ -38,9 +38,7 @@ namespace Cryptools.Actors
 				throw new InvalidOperationException("Key must not be null to encrypt data");
 			}
 
-			var keyBits = new BitArray(key.KeyBytes);
-
-			var encryptedBlock = await network.EncryptBlock(mode.Block, keyBits);
+			var encryptedBlock = await network.EncryptBlock(mode.Block, key);
 			operationResult = encryptedBlock;
 		}
 
@@ -49,12 +47,12 @@ namespace Cryptools.Actors
 			throw new NotImplementedException();
 		}
 
-		public Block GetResult()
+		public RoundResult GetResult()
 		{
 			return this.operationResult;
 		}
 
-		public void SetCryptoParams(SymmetricKey key)
+		public void SetCryptoParams(BitArray key)
 		{
 			this.key = key;
 		}

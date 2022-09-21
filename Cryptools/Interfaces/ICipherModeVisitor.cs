@@ -6,6 +6,7 @@ namespace Cryptools.Interfaces
 {
 	using Cryptools.Models;
 	using Cryptools.Models.CipherModes;
+	using System.Collections;
 
 	public interface ICipherModeVisitor
 	{
@@ -17,8 +18,8 @@ namespace Cryptools.Interfaces
 
 		Task Visit(OutputFeedbackMode mode);
 
-		void SetCryptoParams(SymmetricKey key);
+		void SetCryptoParams(BitArray key);
 
-		Block GetResult();
+		RoundResult GetResult();
 	}
 }

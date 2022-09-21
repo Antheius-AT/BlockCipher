@@ -22,7 +22,7 @@ namespace Cryptools.Modules
 
 		public Task<RoundResult> Decrypt(Block plainText, BitArray key, int round)
 		{
-			key = key.LeftShift(round);
+			//key = key.LeftShift(round);
 
 			if (permutationTable.Length != plainText.Data.Length)
 			{
@@ -42,6 +42,7 @@ namespace Cryptools.Modules
 
 		public Task<RoundResult> Encrypt(Block plainText, BitArray key, int round)
 		{
+			// Abwechselnd 1 und 2 Stellen shiften und manuell 1 oder 2 Stellen nachbessern die sonst verloren gehn.
 			key = key.RightShift(round);
 
 			if (permutationTable.Length != plainText.Data.Length)
