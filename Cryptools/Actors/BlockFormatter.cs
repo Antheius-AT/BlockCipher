@@ -28,7 +28,7 @@ namespace Cryptools.Actors
             set
             {
                 blockSize =
-                    value > 127 && Math.Log2(value) % 1 == 0
+                    value > 63 && Math.Log2(value) % 1 == 0
                     ? value
                     : throw new ArgumentOutOfRangeException("Block size must be at least 128 and a power of 2");
             }

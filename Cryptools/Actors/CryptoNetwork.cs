@@ -33,7 +33,7 @@ namespace Cryptools.Actors
 		{
 			var currentInputBlock = plainText;
 
-			foreach (var item in cryptoModules)
+			foreach (var item in cryptoModules.Reverse())
 			{
 				currentInputBlock = await item.Decrypt(currentInputBlock, key);
 			}

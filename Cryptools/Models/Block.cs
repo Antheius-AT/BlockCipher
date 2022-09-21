@@ -23,7 +23,7 @@ namespace Cryptools.Models
         {
             get
             {
-                return new BlockSize(Data.Length + Padding?.Length ?? 0);
+                return new BlockSize(this.Data.Length);
             }
         }
 

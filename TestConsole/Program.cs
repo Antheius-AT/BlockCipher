@@ -18,23 +18,25 @@ namespace Cryptools
     public class Program
     {
         private static byte[] paddingBytes;
+        private static string paddingText = "paddingpaddingpaddingpaddingpadding";
 
         private static async Task Main(string[] args)
         {
+            int blockLength = 128;
+
             var network = new CryptoNetwork(new List<ICryptoModule>()
             {
-                new BitwiseAssociator(),
+                new Permutator(CreatePermutationTable(blockLength)),
             });
 
             ICipherModeVisitor visitor = new Encryptor(network);
 
-            int blockLength = 128;
             var blockFormatter = new BlockFormatter(blockLength);
             var key = new SymmetricKey(Convert.FromHexString("4125442A472D4B6150645367566B5970"));
 
 
             var plainText = Console.ReadLine();
-            var plainTextBytes = Encoding.ASCII.GetBytes(plainText);
+            var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
 
             plainTextBytes = AppendPadding(plainTextBytes, blockLength);
             List<Block> encryptedBlocks = new List<Block>();
@@ -51,13 +53,15 @@ namespace Cryptools
             }
 
             Console.WriteLine($"Plaintext without padding: {plainText}");
-            Console.WriteLine($"Plaintext with padding: {Encoding.ASCII.GetString(plainTextBytes)}");
+            Console.WriteLine($"Plaintext with padding: {Encoding.UTF8.GetString(plainTextBytes)}");
 
             Console.WriteLine("Ciphertext:");
 
             foreach (var item in encryptedBlocks)
             {
-                Console.Write(Encoding.ASCII.GetString(item.WholeBlock.ToByteArray()));
+                Console.WriteLine("Block start");
+                Console.Write(Encoding.UTF8.GetString(item.Data.ToByteArray()));
+                Console.WriteLine("Block End");
             }
 
             Console.WriteLine();
@@ -80,7 +84,7 @@ namespace Cryptools
             var plaintextWithoutPadding = RemovePadding(finalResult);
 
             Console.WriteLine("Plain text ohne padding Schlussresultat:");
-            Console.WriteLine(Encoding.ASCII.GetString(plaintextWithoutPadding));
+            Console.WriteLine(Encoding.UTF8.GetString(plaintextWithoutPadding));
 
             Console.ReadLine();
         }
@@ -100,14 +104,50 @@ namespace Cryptools
                 nextFactor += (blockLength / 8);
             }
 
-            paddingBytes = RandomNumberGenerator.GetBytes(nextFactor - plainText.Length);
+            paddingBytes = Encoding.UTF8.GetBytes(paddingText.Take(nextFactor - plainText.Length).ToArray());
 
             return plainText.Concat(paddingBytes).ToArray();
         }
 
         private static byte[] RemovePadding(byte[] plainText)
         {
+            if (paddingBytes == null)
+            {
+                return plainText;
+            }
+
             return plainText.Take(plainText.Length - paddingBytes.Length).ToArray();
+        }
+
+        private static int[] CreatePermutationTable(int blockLength)
+        {
+            var table = new int[blockLength];
+
+            for (int i = 0; i < table.Length; i++)
+            {
+                table[i] = i;
+            }
+
+            for (int i = 0; i < table.Length * 5; i++)
+            {
+                Permutate(table);
+            }
+
+            return table;
+        }
+
+        private static int[] Permutate(int[] table)
+        {
+            for (int i = 0; i < table.Length; i++)
+            {
+                var newIndex = RandomNumberGenerator.GetInt32(0, table.Length);
+                var current = table[i];
+
+                table[i] = table[newIndex];
+                table[newIndex] = current;
+            }
+
+            return table;
         }
     }
 }
