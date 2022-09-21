@@ -60,7 +60,7 @@ namespace Cryptools
             foreach (var item in encryptedBlocks)
             {
                 Console.WriteLine("Block start");
-                Console.Write(Encoding.UTF8.GetString(item.Data.ToByteArray()));
+                Console.WriteLine(Encoding.UTF8.GetString(item.Data.ToByteArray()));
                 Console.WriteLine("Block End");
             }
 

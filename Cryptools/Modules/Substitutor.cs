@@ -17,12 +17,12 @@ namespace Cryptools.Modules
 		{
 		}
 
-		public Task<Block> Decrypt(Block plainText, BitArray key)
+		public Task<RoundResult> Decrypt(Block plainText, BitArray key, int round)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<Block> Encrypt(Block plainText, BitArray key)
+		public Task<RoundResult> Encrypt(Block plainText, BitArray key, int round)
 		{
 			throw new NotImplementedException();
 		}

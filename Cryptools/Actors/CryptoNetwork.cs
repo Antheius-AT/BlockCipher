@@ -20,10 +20,13 @@ namespace Cryptools.Actors
 		public async Task<Block> EncryptBlock(Block plaintext, BitArray key)
 		{
 			var currentInputBlock = plaintext;
+			var currentKey = key;
 
-			foreach (var item in cryptoModules)
+			for (int i = 0; i < cryptoModules.Count(); i++)
 			{
-				currentInputBlock = await item.Encrypt(currentInputBlock, key);
+				var currentResult = await cryptoModules.ElementAt(i).Encrypt(currentInputBlock, currentKey, i);
+				currentInputBlock = currentResult.Block;
+				currentKey = currentResult.CurrentKey;
 			}
 
 			return currentInputBlock;
@@ -32,10 +35,13 @@ namespace Cryptools.Actors
 		public async Task<Block> DecryptBlock(Block plainText, BitArray key)
 		{
 			var currentInputBlock = plainText;
+			var currentKey = key;
 
-			foreach (var item in cryptoModules.Reverse())
+			for (int i = cryptoModules.Count() - 1; i >= 0; i--)
 			{
-				currentInputBlock = await item.Decrypt(currentInputBlock, key);
+				var currentResult = await cryptoModules.ElementAt(i).Decrypt(currentInputBlock, currentKey, i);
+				currentInputBlock = currentResult.Block;
+				currentKey = currentResult.CurrentKey;
 			}
 
 			return currentInputBlock;

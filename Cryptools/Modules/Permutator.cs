@@ -20,8 +20,10 @@ namespace Cryptools.Modules
 			this.permutationTable = permutationTable;
 		}
 
-		public Task<Block> Decrypt(Block plainText, BitArray key)
+		public Task<RoundResult> Decrypt(Block plainText, BitArray key, int round)
 		{
+			key = key.LeftShift(round);
+
 			if (permutationTable.Length != plainText.Data.Length)
 			{
 				throw new ArgumentException(nameof(plainText), $"Block size did not match table size of {permutationTable.Length}");
@@ -35,16 +37,18 @@ namespace Cryptools.Modules
 				plainText.Data[permutationTable[i]] = currentValue;
 			}
 
-			return Task.FromResult(plainText);
+			return Task.FromResult(new RoundResult(plainText, key));
 		}
 
-		public Task<Block> Encrypt(Block plainText, BitArray key)
+		public Task<RoundResult> Encrypt(Block plainText, BitArray key, int round)
 		{
+			key = key.RightShift(round);
+
 			if (permutationTable.Length != plainText.Data.Length)
 			{
 				throw new ArgumentException(nameof(plainText), $"Block size did not match table size of {permutationTable.Length}");
 			}
-
+			
 			for (int i = 0; i < permutationTable.Length; i++)
 			{
 				var currentValue = plainText.Data[i];
@@ -53,7 +57,7 @@ namespace Cryptools.Modules
 				plainText.Data[permutationTable[i]] = currentValue;
 			}
 
-			return Task.FromResult(plainText);
+			return Task.FromResult(new RoundResult(plainText, key));
 		}
 	}
 }

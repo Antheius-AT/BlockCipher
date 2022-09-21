@@ -11,18 +11,18 @@ namespace Cryptools.Modules
 
 	public class BitwiseAssociator : ICryptoModule
 	{
-		public Task<Block> Decrypt(Block plainText, BitArray key)
+		public Task<RoundResult> Decrypt(Block plainText, BitArray key, int round)
 		{
 			plainText.ModifyBlock(plainText.WholeBlock.Xor(key));
 
-			return Task.FromResult(plainText);
+			return Task.FromResult(new RoundResult(plainText, key));
 		}
 
-		public Task<Block> Encrypt(Block plainText, BitArray key)
+		public Task<RoundResult> Encrypt(Block plainText, BitArray key, int round)
 		{
 			plainText.ModifyBlock(plainText.WholeBlock.Xor(key));
 
-			return Task.FromResult(plainText);
+			return Task.FromResult(new RoundResult(plainText, key));
 		}
 	}
 }
