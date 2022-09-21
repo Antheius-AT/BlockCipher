@@ -2,15 +2,22 @@
 // Licensed under the MIT license.
 // Author "Gregor Faiman"
 
+using Cryptools.Extensions;
+using System.Collections;
+
 namespace Cryptools.Models
 {
     public class Block
     {
-        public Block(byte[] data, byte[]? padding = null)
+		private BitArray wholeBlock;
+
+        public Block(BitArray data, BitArray? padding = null)
         {
             this.Data = data;
             this.Padding = padding;
-        }
+
+			this.WholeBlock = new BitArray(Data.ToByteArray().Concat(Padding?.ToByteArray() ?? Enumerable.Empty<byte>()).ToArray());
+		}
 
         public BlockSize BlockSize
         {
@@ -20,10 +27,25 @@ namespace Cryptools.Models
             }
         }
 
-		public byte[] WholeBlock => Data.Concat(Padding ?? Enumerable.Empty<byte>()).ToArray();
+		public BitArray WholeBlock
+		{
+			get
+			{
+				return wholeBlock;
+			}
 
-        public byte[] Data { get; }
+			private set
+			{
+				this.wholeBlock = value;
+			}
+		}
+        public BitArray Data { get; }
 
-        public byte[]? Padding { get; }
+        public BitArray? Padding { get; }
+
+		public void ModifyBlock(BitArray wholeBlockBits)
+		{
+			this.WholeBlock = wholeBlockBits;
+		}
     }
 }

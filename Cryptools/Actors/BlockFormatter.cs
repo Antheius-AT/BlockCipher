@@ -4,8 +4,11 @@
 
 namespace Cryptools.Actors
 {
+	using Cryptools.Extensions;
 	using Cryptools.Models;
+	using System.Collections;
 	using System.Security.Cryptography;
+	using System.Text;
 
 	public class BlockFormatter
     {
@@ -33,7 +36,7 @@ namespace Cryptools.Actors
 
         protected int BlockSizeInBytes => this.BlockSize / 8;
 
-        public Block[] TransformText(byte[] text)
+        public Block[] TransformTextToBlocks(byte[] text)
         {
             if (text.Length == 0)
             {
@@ -52,12 +55,35 @@ namespace Cryptools.Actors
                     ? RandomNumberGenerator.GetBytes(BlockSizeInBytes - current.Length)
                     : null;
 
-                blocks.Add(new Block(current, padding));
-                text = text[0..(text.Length - current.Length)];
-            }
+				if (current.Any())
+				{
+					var blockBits = new BitArray(current);
+					BitArray? paddingBits = null;
+
+					if (padding != null)
+					{
+						paddingBits = new BitArray(padding);
+					}
+
+					blocks.Add(new Block(blockBits, paddingBits));
+					text = text[(0 + current.Length)..text.Length];
+				}
+			}
             while (current.Length == BlockSizeInBytes);
 
             return blocks.ToArray();
         }
+
+		public byte[] TransformBlocksToText(IEnumerable<Block> blocks)
+		{
+			var bytes = new List<byte>();
+
+			foreach (var item in blocks)
+			{
+				bytes.AddRange(item.Data.ToByteArray());
+			}
+
+			return bytes.ToArray();
+		}
     }
 }
