@@ -59,11 +59,11 @@ namespace Cryptools.Modules
 
 			if (round % 2 == 0)
 			{
-				key.ShiftRightCustom(2);
+				key = key.ShiftRightCustom(2);
 			}
 			else
 			{
-				key.ShiftRightCustom(1);
+				key = key.ShiftRightCustom(1);
 			}
 
 			return Task.FromResult(new RoundResult(plainText, key));
@@ -71,7 +71,6 @@ namespace Cryptools.Modules
 
 		public Task<RoundResult> Encrypt(Block plainText, BitArray key, int round)
 		{
-			// Abwechselnd 1 und 2 Stellen shiften und manuell 1 oder 2 Stellen nachbessern die sonst verloren gehn.
 			if (round % 2 == 0)
 			{
 				key.ShiftLeftCustom(2);
@@ -81,7 +80,6 @@ namespace Cryptools.Modules
 				key.ShiftLeftCustom(1);
 			}
 
-			// Idee: ich schaue mir den Key an und loope durch, überall dort wo ein Byte Wert gleich einem integer index Wert in der permutation Tabelle ist
 			if (permutationTable.Length != plainText.Data.Length)
 			{
 				throw new ArgumentException(nameof(plainText), $"Block size did not match table size of {permutationTable.Length}");

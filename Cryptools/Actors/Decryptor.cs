@@ -53,6 +53,7 @@ namespace Cryptools.Actors
 
 			var decryptedBlock = await network.DecryptBlock(mode.Block, keyBits);
 			operationResult = decryptedBlock;
+			key = operationResult.CurrentKey;
 		}
 
 		public Task Visit(OutputFeedbackMode mode)

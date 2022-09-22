@@ -4,9 +4,11 @@
 
 namespace Cryptools.Actors
 {
+	using Cryptools.Extensions;
 	using Cryptools.Interfaces;
 	using Cryptools.Models;
 	using System.Collections;
+	using System.Text;
 
 	public class CryptoNetwork
 	{

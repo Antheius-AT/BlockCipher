@@ -29,23 +29,6 @@ namespace Cryptools
             var network = new CryptoNetwork(new List<ICryptoModule>()
             {
                 new Permutator(CreatePermutationTable(blockLength)),
-                new Permutator(CreatePermutationTable(blockLength)),
-                new Permutator(CreatePermutationTable(blockLength)),
-                new Permutator(CreatePermutationTable(blockLength)),
-                new Permutator(CreatePermutationTable(blockLength)),
-                new Permutator(CreatePermutationTable(blockLength)),
-                new Permutator(CreatePermutationTable(blockLength)),
-                new Permutator(CreatePermutationTable(blockLength)),
-                new Permutator(CreatePermutationTable(blockLength)),
-                new Permutator(CreatePermutationTable(blockLength)),
-                new Permutator(CreatePermutationTable(blockLength)),
-                new Permutator(CreatePermutationTable(blockLength)),
-                new Permutator(CreatePermutationTable(blockLength)),
-                new Permutator(CreatePermutationTable(blockLength)),
-                new Permutator(CreatePermutationTable(blockLength)),
-                new Permutator(CreatePermutationTable(blockLength)),
-                new Permutator(CreatePermutationTable(blockLength)),
-                new Permutator(CreatePermutationTable(blockLength)),
             });
 
             ICipherModeVisitor visitor = new Encryptor(network);
@@ -96,6 +79,9 @@ namespace Cryptools
             var decryptor = new Decryptor(network);
 
             decryptor.SetCryptoParams(currentKey);
+
+            encryptedBlocks.Reverse();
+
             foreach (var item in encryptedBlocks)
             {
                 var mode = new ElectronicCodebookMode(item);
@@ -106,6 +92,8 @@ namespace Cryptools
             }
 
             var modifiedKey = currentKey.ToByteArray();
+
+            decipheredBytes.Reverse();
 
             var finalResult = blockFormatter.TransformBlocksToText(decipheredBytes);
 
