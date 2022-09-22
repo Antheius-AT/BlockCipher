@@ -2,17 +2,42 @@
 // Licensed under the MIT license.
 // Author "Gregor Faiman"
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cryptools.Extensions
 {
 	public static class BitExtensions
 	{
+		public static BitArray ShiftLeftCustom(this BitArray src, int amount)
+		{
+			for (int i = 1; i <= amount; i++)
+			{
+				src = src.ShiftLeftOnce();
+			}
+
+			return src;
+		}
+
+		public static BitArray ShiftRightCustom(this BitArray src, int amount)
+		{
+			for (int i = 1; i <= amount; i++)
+			{
+				src = src.ShiftRightOnce();
+			}
+
+			return src;
+		}
+
+		public static BitArray Switch(this BitArray src, int firstIndex, int secondIndex)
+		{
+			var currentValue = src[firstIndex];
+
+			src[firstIndex] = src[secondIndex];
+			src[secondIndex] = currentValue;
+
+			return src;
+		}
+
 		public static byte[] ToByteArray(this BitArray src)
 		{
 			if (src.Length == 0 || src.Length % 8 != 0)
@@ -53,6 +78,40 @@ namespace Cryptools.Extensions
 			src.CopyTo(bytes, 0);
 
 			return bytes.First();
+		}
+
+		private static BitArray ShiftLeftOnce(this BitArray src)
+		{
+			int shiftIndex;
+			var lastElement = src[src.Length - 1];
+
+			for (int i = 0; i < src.Length; i++)
+			{
+				shiftIndex = i - 1 >= 0
+					? i - 1
+					: src.Length - 1;
+
+				src[shiftIndex] = i == src.Length - 1 ? lastElement : src[i];
+			}
+
+			return src;
+		}
+
+		private static BitArray ShiftRightOnce(this BitArray src)
+		{
+			int shiftIndex;
+			var firstElement = src[0];
+
+			for (int i = src.Length - 1; i >= 0; i--)
+			{
+				shiftIndex = i + 1 < src.Length
+					? i + 1
+					: 0;
+
+				src[shiftIndex] = i == 0 ? firstElement : src[i];
+			}
+
+			return src;
 		}
 	}
 }
