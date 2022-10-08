@@ -28,7 +28,13 @@ namespace Cryptools
 
             var network = new CryptoNetwork(new List<ICryptoModule>()
             {
+                new BitwiseAssociator(),
+                new Substitutor(GetSubstitutionTable()),
                 new Permutator(CreatePermutationTable(blockLength)),
+                new Permutator(CreatePermutationTable(blockLength)),
+                new Substitutor(GetSubstitutionTable()),
+                new BitwiseAssociator(),
+                new Substitutor(GetSubstitutionTable()),
             });
 
             ICipherModeVisitor visitor = new Encryptor(network);
@@ -152,7 +158,24 @@ namespace Cryptools
             return table;
         }
 
-        private static int[] Permutate(int[] table)
+        private static char[] GetSubstitutionTable()
+        {
+            var result = new char[256];
+
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = (char)i;
+            }
+
+            for (int i = 0; i < result.Length * 5; i++)
+            {
+                Permutate(result);
+            }
+
+            return result;
+        }
+
+        private static T[] Permutate<T>(T[] table)
         {
             for (int i = 0; i < table.Length; i++)
             {

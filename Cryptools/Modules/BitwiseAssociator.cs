@@ -13,14 +13,14 @@ namespace Cryptools.Modules
 	{
 		public Task<RoundResult> Decrypt(Block plainText, BitArray key, int round)
 		{
-			plainText.ModifyBlock(plainText.WholeBlock.Xor(key));
+			plainText.ModifyBlock(plainText.Data.Xor(key));
 
 			return Task.FromResult(new RoundResult(plainText, key));
 		}
 
 		public Task<RoundResult> Encrypt(Block plainText, BitArray key, int round)
 		{
-			plainText.ModifyBlock(plainText.WholeBlock.Xor(key));
+			plainText.ModifyBlock(plainText.Data.Xor(key));
 
 			return Task.FromResult(new RoundResult(plainText, key));
 		}
