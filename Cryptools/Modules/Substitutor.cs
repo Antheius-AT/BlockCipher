@@ -47,7 +47,7 @@ namespace Cryptools.Modules
 				plainTextBytes[i] = (byte)subChar;
 			}
 
-			// Use XOR property as defined by feistel. B + S(B) + S(B) = B
+			// Inspired by Feistel. Use the fact that XOR is its own reverse: B + S(B) + S(B) = B
 			plainText.ModifyBlock(new BitArray(plainTextBytes));
 
 			var xorResult = new BitArray(unchangedPlaintextBytes).Xor(plainText.Data);
