@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// Copyright file="ICryptographicKey.cs" Fachhochschule Technikum Wien (FHTW).
+// Licensed under the MIT license.
+// Author "Gregor Faiman"
 
 namespace Cryptools.Interfaces
 {

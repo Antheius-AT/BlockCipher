@@ -10,6 +10,6 @@ namespace Cryptools.Interfaces
 	public interface ICryptoModule
 	{
 		Task<RoundResult> Encrypt(Block plainText, BitArray key, int round);
-		Task<RoundResult> Decrypt(Block plainText, BitArray key, int round);
+		Task<RoundResult> Decrypt(Block cipherText, BitArray key, int round);
 	}
 }

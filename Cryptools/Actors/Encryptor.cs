@@ -21,12 +21,12 @@ namespace Cryptools.Actors
 			this.network = network;
 		}
 
-		public async Task Visit(CipherBlockChainMode mode)
+		public Task Visit(CipherBlockChainMode mode)
 		{
 			throw new NotImplementedException();
 		}
 
-		public async Task Visit(CipherFeedbackMode mode)
+		public Task Visit(CipherFeedbackMode mode)
 		{
 			throw new NotImplementedException();
 		}
@@ -42,7 +42,7 @@ namespace Cryptools.Actors
 			operationResult = encryptedBlock;
 		}
 
-		public async Task Visit(OutputFeedbackMode mode)
+		public Task Visit(OutputFeedbackMode mode)
 		{
 			throw new NotImplementedException();
 		}

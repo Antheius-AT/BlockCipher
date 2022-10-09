@@ -43,29 +43,18 @@ namespace Cryptools.Actors
                 throw new ArgumentException(nameof(text), "Must specify text to be able to separate it into blocks");
             }
 
-            // Note to self: Block size is calculated in bits, I'm dealing with an array of bytes, don't forget to convert!
             var blocks = new List<Block>();
             byte[] current;
-            byte[]? padding;
 
             do
             {
                 current = text.Take(BlockSizeInBytes).ToArray();
-                padding = current.Length != BlockSizeInBytes
-                    ? RandomNumberGenerator.GetBytes(BlockSizeInBytes - current.Length)
-                    : null;
 
 				if (current.Any())
 				{
 					var blockBits = new BitArray(current);
-					BitArray? paddingBits = null;
 
-					if (padding != null)
-					{
-						paddingBits = new BitArray(padding);
-					}
-
-					blocks.Add(new Block(blockBits, paddingBits));
+					blocks.Add(new Block(blockBits));
 					text = text[(0 + current.Length)..text.Length];
 				}
 			}

@@ -1,4 +1,8 @@
-﻿namespace Cryptools.Models
+﻿// Copyright file="BlockSize.cs" Fachhochschule Technikum Wien (FHTW).
+// Licensed under the MIT license.
+// Author "Gregor Faiman"
+
+namespace Cryptools.Models
 {
     public class BlockSize
     {

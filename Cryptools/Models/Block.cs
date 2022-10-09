@@ -2,17 +2,15 @@
 // Licensed under the MIT license.
 // Author "Gregor Faiman"
 
-using Cryptools.Extensions;
-using System.Collections;
-
 namespace Cryptools.Models
 {
-    public class Block
+	using System.Collections;
+
+	public class Block
     {
-        public Block(BitArray data, BitArray? padding = null)
+        public Block(BitArray data)
         {
             this.Data = data;
-            this.Padding = padding;
 		}
 
         public BlockSize BlockSize
@@ -24,8 +22,6 @@ namespace Cryptools.Models
         }
 
         public BitArray Data { get; private set; }
-
-        public BitArray? Padding { get; }
 
 		public void ModifyBlock(BitArray wholeBlockBits)
 		{

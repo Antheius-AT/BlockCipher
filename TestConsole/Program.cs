@@ -22,10 +22,15 @@ namespace Cryptools
 
         private static async Task Main(string[] args)
         {
-            var test = new BitArray(3, true);
-
             int blockLength = 128;
 
+            // Convert key to BitArray from hex string.
+            var key = new SymmetricKey(Convert.FromHexString("4125442A472D4B6150645367566B5970"));
+            var currentKey = new BitArray(key.KeyBytes);
+
+            // Here the network is configured by adding modules to the network.
+            // Each module is called once per block encryption/decryption.
+            // Note that the BitwiseAssociator (XOR) module requires the key and block length to be 128 bit in size.
             var network = new CryptoNetwork(new List<ICryptoModule>()
             {
                 new BitwiseAssociator(),
@@ -37,25 +42,26 @@ namespace Cryptools
                 new Substitutor(GetSubstitutionTable()),
             });
 
+            // Start encryption process
             ICipherModeVisitor visitor = new Encryptor(network);
-
             var blockFormatter = new BlockFormatter(blockLength);
-            var key = new SymmetricKey(Convert.FromHexString("4125442A472D4B6150645367566B5970"));
 
-
+            // User input plaintext and convert plaintext from string to bytes.
             var plainText = Console.ReadLine();
             var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
 
+            // Append padding if required, based on blockLength
             plainTextBytes = AppendPadding(plainTextBytes, blockLength);
-            List<Block> encryptedBlocks = new List<Block>();
 
-            var initialKey = key.KeyBytes;
-
+            // Create individual blocks based on text and block size.
             var blocks = blockFormatter.TransformTextToBlocks(plainTextBytes);
-            var currentKey = new BitArray(key.KeyBytes);
 
             visitor.SetCryptoParams(currentKey);
 
+            // Initialize list that stores encrypted blocks.
+            List<Block> encryptedBlocks = new List<Block>();
+
+            // Encrypt blocks.
             foreach (var item in blocks)
             {
                 var mode = new ElectronicCodebookMode(item);
@@ -66,28 +72,30 @@ namespace Cryptools
                 encryptedBlocks.Add(roundResult.Block);
             }
 
-            Console.WriteLine($"Plaintext without padding: {plainText}");
-            Console.WriteLine($"Plaintext with padding: {Encoding.UTF8.GetString(plainTextBytes)}");
+            PrintInColor($"Plaintext without padding: {plainText}", ConsoleColor.Yellow);
+            PrintInColor($"Plaintext with padding: {Encoding.UTF8.GetString(plainTextBytes)}", ConsoleColor.Yellow);
+            PrintInColor($"Plaintext without padding in base 64: {Convert.ToBase64String(Encoding.UTF8.GetBytes(plainText))}", ConsoleColor.Yellow);
+            PrintInColor("Ciphertext (in base 64 ausgegeben):", ConsoleColor.Yellow);
 
-            Console.WriteLine("Ciphertext:");
-
+            // Visualize encrypted blocks on console
             foreach (var item in encryptedBlocks)
             {
-                Console.WriteLine("Block start");
-                Console.WriteLine(Encoding.UTF8.GetString(item.Data.ToByteArray()));
-                Console.WriteLine("Block End");
+                PrintInColor("Block start", ConsoleColor.Red);
+                PrintInColor(Convert.ToBase64String(item.Data.ToByteArray()), ConsoleColor.Yellow);
+                PrintInColor("Block end", ConsoleColor.Red);
             }
-
-            Console.WriteLine();
 
             var decipheredBytes = new List<Block>();
 
-            var decryptor = new Decryptor(network);
-
+            // Start decryption process
+            ICipherModeVisitor decryptor = new Decryptor(network);
             decryptor.SetCryptoParams(currentKey);
 
+            // Reverse blocks to start deciphering from last block to first block.
+            // Required when using the permutator due to bitshift shenanigans.
             encryptedBlocks.Reverse();
 
+            // Decrypt blocks
             foreach (var item in encryptedBlocks)
             {
                 var mode = new ElectronicCodebookMode(item);
@@ -97,23 +105,25 @@ namespace Cryptools
                 decipheredBytes.Add(singleResult.Block);
             }
 
-            var modifiedKey = currentKey.ToByteArray();
-
+            // Bring deciphered blocks into correct order again, as they were deciphered last to first.
             decipheredBytes.Reverse();
 
+            // Transform blocks to single byte array and remove padding from deciphered plaintext.
             var finalResult = blockFormatter.TransformBlocksToText(decipheredBytes);
-
             var plaintextWithoutPadding = RemovePadding(finalResult);
 
-            Console.WriteLine("Plain text ohne padding Schlussresultat:");
-            Console.WriteLine(Encoding.UTF8.GetString(plaintextWithoutPadding));
+            // Output result
+            PrintInColor("Plain text ohne padding Schlussresultat base64:", ConsoleColor.Red);
+            PrintInColor(Convert.ToBase64String(plaintextWithoutPadding), ConsoleColor.Yellow);
+
+            PrintInColor("Plain text ohne padding Schlussresultat:", ConsoleColor.Red);
+            PrintInColor(Encoding.UTF8.GetString(plaintextWithoutPadding), ConsoleColor.Yellow);
 
             Console.ReadLine();
         }
 
         private static byte[] AppendPadding(byte[] plainText, int blockLength)
         {
-            // currently only support 128 bit length.
             if (plainText.Length % (blockLength / 8) == 0)
             {
                 return plainText;
@@ -187,6 +197,17 @@ namespace Cryptools
             }
 
             return table;
+        }
+
+        private static void PrintInColor(string message, ConsoleColor color)
+        {
+            var currentColor = Console.ForegroundColor;
+
+            Console.ForegroundColor = color;
+
+            Console.WriteLine(message);
+
+            Console.ForegroundColor = currentColor;
         }
     }
 }

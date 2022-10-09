@@ -2,10 +2,10 @@
 // Licensed under the MIT license.
 // Author "Gregor Faiman"
 
-using System.Collections;
-
 namespace Cryptools.Extensions
 {
+	using System.Collections;
+
 	public static class BitExtensions
 	{
 		public static BitArray ShiftLeftCustom(this BitArray src, int amount)
